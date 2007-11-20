@@ -1,5 +1,6 @@
 package net.silentlycrashing.gestures;
 
+import java.awt.*;
 import net.silentlycrashing.util.*;
 import processing.core.*;
 
@@ -7,8 +8,22 @@ public abstract class SimpleGestureListener extends GestureListener {
 	protected String activePattern;
 	protected boolean active;
 	
+	protected Rectangle bounds;
+	protected boolean inBounds;
+	
 	protected RegisteredAction onAction;
 	protected RegisteredAction offAction;
+	
+	/**
+	 * Builds a SimpleGestureListener covering the entire canvas.
+	 * 
+	 * @param parent the parent PApplet
+	 * @param analyzer the linked GestureAnalyzer
+	 * @param pattern the move pattern to match for the Listener to be active
+	 */
+	public SimpleGestureListener(PApplet parent, GestureAnalyzer analyzer, String pattern) {
+		this(parent, analyzer, pattern, new Rectangle(0, 0, parent.width, parent.height));
+	}
 	
 	/**
 	 * Builds a SimpleGestureListener.
@@ -16,11 +31,15 @@ public abstract class SimpleGestureListener extends GestureListener {
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
 	 * @param pattern the move pattern to match for the Listener to be active
+	 * @param bounds the bounding Rectangle of the first mouse press
 	 */
-	public SimpleGestureListener(PApplet parent, GestureAnalyzer analyzer, String pattern) {
+	public SimpleGestureListener(PApplet parent, GestureAnalyzer analyzer, String pattern, Rectangle bounds) {
 		super(parent, analyzer);
 		activePattern = pattern;
 		active = false;
+		
+		this.bounds = bounds;
+		inBounds = true;
 	}
 
 	/** 
@@ -28,7 +47,13 @@ public abstract class SimpleGestureListener extends GestureListener {
 	 * 
 	 * @param p the first PointInTime of the gesture (unused)
 	 */
-	public void startListening(PointInTime pt) {}
+	public void startListening(PointInTime pt) {
+		if (bounds.contains(pt)) {
+			inBounds = true;
+		} else {
+			inBounds = false;
+		}
+	}
 	
 	/** 
 	 * Checks if the regex pattern is matched and sets the Listener as active or not.
@@ -36,10 +61,12 @@ public abstract class SimpleGestureListener extends GestureListener {
 	 * @param p the current PointInTime of the gesture
 	 */
 	public void keepListening(PointInTime pt) {
-		if (ga.matches(activePattern)) {
-			activate();
-		} else {
-			deactivate();
+		if (inBounds) {
+			if (ga.matches(activePattern)) {
+				activate();
+			} else {
+				deactivate();
+			}
 		}
 	}
 	
@@ -49,7 +76,9 @@ public abstract class SimpleGestureListener extends GestureListener {
 	 * @param p the last PointInTime of the gesture
 	 */
 	public void stopListening(PointInTime pt) {
-		deactivate();
+		if (inBounds) {
+			deactivate();
+		}
 	}
 	
 	/**
@@ -90,5 +119,6 @@ public abstract class SimpleGestureListener extends GestureListener {
 		}
     }
 	
+    public void setBounds(Rectangle newBounds) { bounds = newBounds; }
     public boolean isActive() { return active; }
 }

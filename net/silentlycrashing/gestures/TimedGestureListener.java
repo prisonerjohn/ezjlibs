@@ -8,7 +8,6 @@ public class TimedGestureListener extends SimpleGestureListener {
 	protected int minMoves;
 	protected int minDuration;
 	protected LinkedList<Integer> keyMoveTimes;
-	protected boolean realActive;
 	
 	/**
 	 * Builds a TimedGestureListener.
@@ -27,7 +26,6 @@ public class TimedGestureListener extends SimpleGestureListener {
 		minMoves = n;
 		minDuration = d;
 		keyMoveTimes = new LinkedList<Integer>();
-		realActive = false;
 		
 		p.registerPost(this);
 	}
@@ -35,24 +33,29 @@ public class TimedGestureListener extends SimpleGestureListener {
 	public void startListening(PointInTime pt) {
 		super.startListening(pt);
 		
-		if (ga.matches(validPattern)) {
-			keyMoveTimes.add(pt.birthFrame());
+		if (inBounds) {
+			if (ga.matches(validPattern)) {
+				keyMoveTimes.add(pt.birthFrame());
+			}
 		}
 	}
 
 	public void keepListening(PointInTime pt) {
-		if (ga.matches(validPattern)) {
-			keyMoveTimes.add(pt.birthFrame());
+		if (inBounds) {
+			if (ga.matches(validPattern)) {
+				keyMoveTimes.add(pt.birthFrame());
+			}
+			setActive();
 		}
-		
-		setActive();
 	}
 	
 	public void stopListening(PointInTime pt) {
-		super.stopListening(pt);
+		if (inBounds) {
+			super.stopListening(pt);
 		
-		// reset everything
-		keyMoveTimes.clear();
+			// reset everything
+			keyMoveTimes.clear();
+		}
 	}
 	
 	/**
