@@ -14,6 +14,7 @@ public class GestureAnalyzer {
 	
 	protected PApplet p;
 	
+	private int buttonToCheck;
 	private int gridSize;
 	private Point startPoint;
 	private StringBuffer gesture;
@@ -23,25 +24,37 @@ public class GestureAnalyzer {
 	private Vector<RegisteredAction> stopActions;
 	
 	/**
-	 * Builds a GestureAnalyzer with default grid size.
+	 * Builds a GestureAnalyzer with default button and grid size.
 	 * 
 	 * @param parent the parent PApplet
 	 */
 	public GestureAnalyzer(PApplet parent) {
-		this(parent, 30);
+		this(parent, MouseEvent.BUTTON1, 30);
+	}
+	
+	/**
+	 * Builds a GestureAnalyzer with default grid size.
+	 * 
+	 * @param parent the parent PApplet
+	 * @param button the mouse button to check
+	 */
+	public GestureAnalyzer(PApplet parent, int button) {
+		this(parent, button, 30);
 	}
 	
 	/**
 	 * Builds a GestureAnalyzer.
 	 * 
 	 * @param parent the parent PApplet
+	 * @param button the mouse button to check
 	 * @param gSize the grid size
 	 */
-	public GestureAnalyzer(PApplet parent, int gSize) {
+	public GestureAnalyzer(PApplet parent, int button, int gSize) {
 		p = parent;
 		p.registerMouseEvent(this);
 		//p.registerPost(this);
 		
+		buttonToCheck = button;
 		gridSize = gSize;
 		startPoint = null;
 		gesture = new StringBuffer();
@@ -118,6 +131,10 @@ public class GestureAnalyzer {
      * @param event the incoming MouseEvent
      */
 	public void mouseEvent(MouseEvent event) {
+		if (event.getButton() != buttonToCheck) {
+			return;
+		}
+		
 		switch (event.getID()) {
 			case MouseEvent.MOUSE_PRESSED:
 				start(event.getPoint());
@@ -172,6 +189,7 @@ public class GestureAnalyzer {
 	
 	/** Called when the mouse is released. */
 	public void stop(Point newPoint) {
+		System.out.println(gesture);
 		invokeStopActions();
 		clear();
 	}
