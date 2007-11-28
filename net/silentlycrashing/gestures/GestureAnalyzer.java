@@ -131,7 +131,9 @@ public class GestureAnalyzer {
      * @param event the incoming MouseEvent
      */
 	public void mouseEvent(MouseEvent event) {
-		if (event.getButton() != buttonToCheck) {
+		//System.out.println("MouseEvent > button:"+event.getButton()+" event:"+event.getID());
+		
+		if ((event.getButton() != buttonToCheck) && (event.getButton() != MouseEvent.NOBUTTON)) {
 			return;
 		}
 		
@@ -189,7 +191,7 @@ public class GestureAnalyzer {
 	
 	/** Called when the mouse is released. */
 	public void stop(Point newPoint) {
-		System.out.println(gesture);
+		//System.out.println(gesture);
 		invokeStopActions();
 		clear();
 	}
