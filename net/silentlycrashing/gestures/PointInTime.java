@@ -1,10 +1,11 @@
 package net.silentlycrashing.gestures;
 
-import java.awt.Point;
+import java.awt.*;
 
 /**
  * A Point with a time stamp (in frames).
  */
+/* $Id$ */
 public class PointInTime extends Point {
 	private int birthFrame;
 	

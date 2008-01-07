@@ -3,7 +3,7 @@ package net.silentlycrashing.gestures;
 import java.util.*;
 import processing.core.*;
 
-public class TimedGestureListener extends SimpleGestureListener {
+public class TimedGestureListener extends ConcurrentGestureListener {
 	protected String validPattern;
 	protected int minMoves;
 	protected int minDuration;

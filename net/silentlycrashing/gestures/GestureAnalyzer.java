@@ -3,9 +3,15 @@ package net.silentlycrashing.gestures;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
 import net.silentlycrashing.util.*;
 import processing.core.*;
 
+/**
+ * A GestureAnalyzer that listens for a matching gesture after the movement is completed.
+ * <p>The analysis algorithm used here is based on the MouseGestures library by Smardec (http://www.smardec.com/products/mouse-gestures.html).</p>
+ */
+/* $Id$ */
 public class GestureAnalyzer {
 	public static final String LEFT = "L";
 	public static final String RIGHT = "R";
@@ -19,9 +25,9 @@ public class GestureAnalyzer {
 	private Point startPoint;
 	private StringBuffer gesture;
 	
-	private Vector<RegisteredAction> startActions;
-	private Vector<RegisteredAction> updateActions;
-	private Vector<RegisteredAction> stopActions;
+	private Vector startActions;
+	private Vector updateActions;
+	private Vector stopActions;
 	
 	/**
 	 * Builds a GestureAnalyzer with default button and grid size.
@@ -52,16 +58,15 @@ public class GestureAnalyzer {
 	public GestureAnalyzer(PApplet parent, int button, int gSize) {
 		p = parent;
 		p.registerMouseEvent(this);
-		//p.registerPost(this);
 		
 		buttonToCheck = button;
 		gridSize = gSize;
 		startPoint = null;
 		gesture = new StringBuffer();
 		
-		startActions = new Vector<RegisteredAction>();
-		updateActions = new Vector<RegisteredAction>();
-		stopActions = new Vector<RegisteredAction>();
+		startActions = new Vector();
+		updateActions = new Vector();
+		stopActions = new Vector();
 	}
 	
 	/**
@@ -79,9 +84,11 @@ public class GestureAnalyzer {
      * Invokes the start actions.
      */
     public void invokeStartActions() {
-    	for (RegisteredAction startAction : startActions) {
+    	RegisteredAction startAction;
+        for (Iterator i = startActions.iterator(); i.hasNext();) {
+        	startAction = (RegisteredAction)i.next();
     		startAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
-    	}
+        }   
     }
     
     /**
@@ -99,9 +106,11 @@ public class GestureAnalyzer {
      * Invokes the update actions.
      */
     public void invokeUpdateActions() {
-    	for (RegisteredAction updateAction : updateActions) {
-    		updateAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
-    	}
+    	RegisteredAction updateAction;
+        for (Iterator i = updateActions.iterator(); i.hasNext();) {
+        	updateAction = (RegisteredAction)i.next();
+        	updateAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
+        }
     }
     
     /**
@@ -119,9 +128,11 @@ public class GestureAnalyzer {
      * Invokes the stop actions.
      */
     public void invokeStopActions() {
-    	for (RegisteredAction stopAction : stopActions) {
-    		stopAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
-    	}
+    	RegisteredAction stopAction;
+        for (Iterator i = stopActions.iterator(); i.hasNext();) {
+        	stopAction = (RegisteredAction)i.next();
+        	stopAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
+        }
     }
 	
 	/**
@@ -131,8 +142,6 @@ public class GestureAnalyzer {
      * @param event the incoming MouseEvent
      */
 	public void mouseEvent(MouseEvent event) {
-		//System.out.println("MouseEvent > button:"+event.getButton()+" event:"+event.getID());
-		
 		if ((event.getButton() != buttonToCheck) && (event.getButton() != MouseEvent.NOBUTTON)) {
 			return;
 		}
@@ -147,23 +156,38 @@ public class GestureAnalyzer {
 			case MouseEvent.MOUSE_CLICKED:
 				break;
 			case MouseEvent.MOUSE_DRAGGED:
-				update(event.getPoint());
+				try {
+					update(event.getPoint());
+				} catch (NullPointerException e) {
+					// XXX only happens on Windows, I think it's related to this NOBUTTON shit
+					System.out.println("StartPoint is missing...");
+				}
 				break;
 			case MouseEvent.MOUSE_MOVED:
 				break;
 		}
 	}
 
-	/** Called when the mouse is pressed. */
-	public void start(Point endPoint) {
-		startPoint = endPoint;
+	/** 
+	 * Sets the start Point and invokes all start RegisteredActions.
+	 * <p>Called when the mouse is pressed.</p>
+	 * 
+	 * @param pt the current mouse Point
+	 */
+	public void start(Point pt) {
+		startPoint = pt;
 		invokeStartActions();
 	}
 	
-	/** Called when the mouse is dragged. */
-	public void update(Point endPoint) {
-		int dX = endPoint.x-startPoint.x;
-		int dY = endPoint.y-startPoint.y;
+	/** 
+	 * Checks if a new move has occurred and if so, invokes all update RegisteredActions.
+	 * <p>Called when the mouse is dragged.</p>
+	 * 
+	 * @param pt the current mouse Point
+	 */
+	public void update(Point pt) {
+		int dX = pt.x-startPoint.x;
+		int dY = pt.y-startPoint.y;
 		int dXAbs = Math.abs(dX);
 		int dYAbs = Math.abs(dY);
 
@@ -185,18 +209,25 @@ public class GestureAnalyzer {
                 saveMove(RIGHT);
         }
         
-        startPoint = endPoint;
+        startPoint = pt;
         invokeUpdateActions();
 	}
 	
-	/** Called when the mouse is released. */
-	public void stop(Point newPoint) {
-		//System.out.println(gesture);
+	/** 
+	 * Invokes all stop RegisteredActions and resets the GestureAnalyzer.
+	 * <p>Called when the mouse is released.</p>
+	 * 
+	 * @param pt the current mouse Point (unused)
+	 */
+	public void stop(Point pt) {
 		invokeStopActions();
-		clear();
+		reset();
 	}
 	
-	private void clear() {
+	/**
+	 * Resets the GestureAnalyzer.
+	 */
+	private void reset() {
     	startPoint = null;
         gesture.delete(0, gesture.length());
     }
@@ -216,6 +247,13 @@ public class GestureAnalyzer {
         invokeUpdateActions();
     }
     
+    /**
+     * Checks if the passed regular expression matches the saved gesture.
+     * 
+     * @param regex the regular expression to check
+     *
+     * @return whether or not there is a match
+     */
     public boolean matches(String regex) {
     	return getGesture().matches(regex);
     }

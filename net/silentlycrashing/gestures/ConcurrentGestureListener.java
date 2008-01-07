@@ -3,7 +3,11 @@ package net.silentlycrashing.gestures;
 import java.awt.*;
 import processing.core.*;
 
-public class ConcurrentGestureListener extends BoundedGestureListener {
+/**
+ * Listens for a matching gesture while the movement is being made.
+ */
+/* $Id$ */
+public class ConcurrentGestureListener extends GestureListener {
 	protected String activePattern;
 	
 	/**
@@ -18,12 +22,27 @@ public class ConcurrentGestureListener extends BoundedGestureListener {
 	}
 	
 	/**
-	 * Builds a ConcurrentGestureListener.
+	 * Builds a bounded ConcurrentGestureListener.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
 	 * @param pattern the move pattern to match for the Listener to be active
-	 * @param bounds the bounding Rectangle of the first mouse press
+	 * @param x the x-coordinate of the bounding Rectangle
+	 * @param y the y-coordinate of the bounding Rectangle
+	 * @param w the width of the bounding Rectangle
+	 * @param h the height of the bounding Rectangle
+	 */
+	public ConcurrentGestureListener(PApplet parent, GestureAnalyzer analyzer, String pattern, int x, int y, int w, int h) {
+		this(parent, analyzer, pattern, new Rectangle(x, y, w, h));
+	}
+	
+	/**
+	 * Builds a bounded ConcurrentGestureListener.
+	 * 
+	 * @param parent the parent PApplet
+	 * @param analyzer the linked GestureAnalyzer
+	 * @param pattern the move pattern to match for the Listener to be active
+	 * @param bounds the bounding Rectangle
 	 */
 	public ConcurrentGestureListener(PApplet parent, GestureAnalyzer analyzer, String pattern, Rectangle bounds) {
 		super(parent, analyzer, bounds);
