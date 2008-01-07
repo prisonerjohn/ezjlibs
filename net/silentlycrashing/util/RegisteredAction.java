@@ -1,20 +1,18 @@
 package net.silentlycrashing.util;
 
-
-import processing.core.PApplet;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
+import processing.core.*;
 
 /**
- * A registered action to associate with an Component state
- *
- * @author Elie Zananiri
+ * An action that can be saved and then invoked by the code.
  */
+/* $Id$ */
 public class RegisteredAction {
     Object registeredObject;
     Method registeredMethod;
     
     /**
-     * builds an RegisteredAction without method arguments
+     * Builds a RegisteredAction without Method arguments.
      * 
      * @param name the name of the method to register
      * @param o the Object holding the method
@@ -31,7 +29,7 @@ public class RegisteredAction {
     }
     
     /**
-     * builds an RegisteredAction with method arguments
+     * Builds a RegisteredAction with Method arguments.
      * 
      * @param name the name of the method to register
      * @param o the Object holding the method
@@ -49,7 +47,7 @@ public class RegisteredAction {
     }
     
     /**
-     * links the given Object and Method to this action
+     * Links the passed Object and Method to this RegisteredAction.
      * 
      * @param o the Object to link
      * @param m the Method to link
@@ -60,14 +58,14 @@ public class RegisteredAction {
     }
 
     /**
-     * invokes the action without arguments
+     * Invokes the RegisteredAction without arguments.
      */
     public void invoke() {
         invoke(new Object[] {});
     }
     
     /**
-     * invokes the action with arguments
+     * Invokes the RegisteredAction with arguments.
      * 
      * @param oargs the arguments as an Object array
      */
