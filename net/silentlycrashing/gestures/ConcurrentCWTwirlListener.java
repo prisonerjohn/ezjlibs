@@ -9,7 +9,7 @@ import processing.core.*;
 /* $Id$ */
 public class ConcurrentCWTwirlListener extends ConcurrentGestureListener implements CWTwirl {
 	/**
-	 * Builds a PostCWTwirlListener covering the entire canvas.
+	 * Builds a ConcurrentCWTwirlListener covering the entire canvas.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
@@ -19,7 +19,7 @@ public class ConcurrentCWTwirlListener extends ConcurrentGestureListener impleme
 	}
 	
 	/**
-	 * Builds a bounded PostCWTwirlListener.
+	 * Builds a bounded ConcurrentCWTwirlListener.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
@@ -33,7 +33,7 @@ public class ConcurrentCWTwirlListener extends ConcurrentGestureListener impleme
 	}
 	
 	/**
-	 * Builds a bounded PostCWTwirlListener.
+	 * Builds a bounded ConcurrentCWTwirlListener.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer

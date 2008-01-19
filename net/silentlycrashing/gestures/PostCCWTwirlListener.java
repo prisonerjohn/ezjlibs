@@ -9,7 +9,7 @@ import processing.core.*;
 /* $Id$ */
 public class PostCCWTwirlListener extends PostGestureListener implements CCWTwirl {
 	/**
-	 * Builds a PostCWTwirlListener covering the entire canvas.
+	 * Builds a PostCCWTwirlListener covering the entire canvas.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
@@ -19,7 +19,7 @@ public class PostCCWTwirlListener extends PostGestureListener implements CCWTwir
 	}
 	
 	/**
-	 * Builds a bounded PostCWTwirlListener.
+	 * Builds a bounded PostCCWTwirlListener.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
@@ -33,7 +33,7 @@ public class PostCCWTwirlListener extends PostGestureListener implements CCWTwir
 	}
 	
 	/**
-	 * Builds a bounded PostCWTwirlListener.
+	 * Builds a bounded PostCCWTwirlListener.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
