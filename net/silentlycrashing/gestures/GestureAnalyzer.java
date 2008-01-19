@@ -10,6 +10,9 @@ import processing.core.*;
 /**
  * A GestureAnalyzer that listens for a matching gesture after the movement is completed.
  * <p>The analysis algorithm used here is based on the <a href="http://www.smardec.com/products/mouse-gestures.html">MouseGestures</a> library by Smardec.</p>
+ * <p>Debugging:<br>
+ * The "verbose" flag can be set to print the recorded gestures to standard output.<br>
+ * The "debug" flag can be set to plot the key points on the display.</p>
  */
 /* $Id$ */
 public class GestureAnalyzer {
@@ -17,6 +20,8 @@ public class GestureAnalyzer {
 	public static final String RIGHT = "R";
 	public static final String UP = "U";
 	public static final String DOWN = "D";
+	
+	public static final int KEY_SIZE = 10;
 	
 	protected PApplet p;
 	
@@ -30,6 +35,7 @@ public class GestureAnalyzer {
 	private Vector stopActions;
 	
 	private boolean verbose;
+	private boolean debug;
 	
 	/**
 	 * Builds a GestureAnalyzer with default button and grid size.
@@ -71,6 +77,7 @@ public class GestureAnalyzer {
 		stopActions = new Vector();
 		
 		verbose = false;
+		debug = false;
 	}
 	
 	/**
@@ -235,7 +242,8 @@ public class GestureAnalyzer {
     	startPoint = null;
         gesture.delete(0, gesture.length());
         
-        if (verbose) PApplet.println();
+        if (verbose) 
+        	PApplet.println();
     }
 	
 	/**
@@ -252,7 +260,13 @@ public class GestureAnalyzer {
         gesture.append(move);
         invokeUpdateActions();
         
-        if (verbose) PApplet.print(move);
+        if (verbose) 
+        	PApplet.print(move);
+        if (debug) {
+        	p.noStroke();
+        	p.fill(204, 0, 0);
+        	p.ellipse(startPoint.x, startPoint.y, KEY_SIZE, KEY_SIZE);
+        }
     }
     
     /**
@@ -272,4 +286,6 @@ public class GestureAnalyzer {
     public boolean isRecognized() { return (gesture.length() > 0); }
     public void setVerbose(boolean v) { verbose = v; }
     public boolean isVerbose() { return verbose; }
+    public void setDebug(boolean d) { debug = d; }
+    public boolean isDebug() { return debug; }
 }

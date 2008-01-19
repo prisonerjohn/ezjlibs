@@ -1,13 +1,15 @@
 package net.silentlycrashing.gestures;
 
 import java.util.*;
+
+import net.silentlycrashing.util.PointInTime;
 import processing.core.*;
 
 public class TimedGestureListener extends ConcurrentGestureListener {
 	protected String validPattern;
 	protected int minMoves;
 	protected int minDuration;
-	protected LinkedList<Integer> keyMoveTimes;
+	protected LinkedList keyMoveTimes;
 	
 	/**
 	 * Builds a TimedGestureListener.
@@ -25,7 +27,7 @@ public class TimedGestureListener extends ConcurrentGestureListener {
 		validPattern = vPattern;
 		minMoves = n;
 		minDuration = d;
-		keyMoveTimes = new LinkedList<Integer>();
+		keyMoveTimes = new LinkedList();
 		
 		p.registerPost(this);
 	}
@@ -35,7 +37,7 @@ public class TimedGestureListener extends ConcurrentGestureListener {
 		
 		if (inBounds) {
 			if (ga.matches(validPattern)) {
-				keyMoveTimes.add(pt.birthFrame());
+				keyMoveTimes.add(new Integer(pt.birthFrame()));
 			}
 		}
 	}
@@ -43,7 +45,7 @@ public class TimedGestureListener extends ConcurrentGestureListener {
 	public void keepListening(PointInTime pt) {
 		if (inBounds) {
 			if (ga.matches(validPattern)) {
-				keyMoveTimes.add(pt.birthFrame());
+				keyMoveTimes.add(new Integer(pt.birthFrame()));
 			}
 			setActive();
 		}
@@ -64,7 +66,7 @@ public class TimedGestureListener extends ConcurrentGestureListener {
 	public void post() {
 		if (p.mousePressed) {
 			while (keyMoveTimes.size() > 0) {
-				if ((p.frameCount-keyMoveTimes.getFirst()) > minDuration*2) {
+				if ((p.frameCount-((Integer)(keyMoveTimes.getFirst())).intValue()) > minDuration*2) {
 					keyMoveTimes.removeFirst();
 				} else {
 					break;
@@ -79,7 +81,7 @@ public class TimedGestureListener extends ConcurrentGestureListener {
 		if (ga.matches(activePattern)) {
 			if (keyMoveTimes.size() >= minMoves) {
 				// there are enough moves
-				if (keyMoveTimes.getLast()-keyMoveTimes.getFirst() >= minDuration) {
+				if ((((Integer)keyMoveTimes.getLast()).intValue()-((Integer)keyMoveTimes.getFirst()).intValue()) >= minDuration) {
 					// the moves are fast enough
 					activate();
 				} else {
@@ -91,6 +93,7 @@ public class TimedGestureListener extends ConcurrentGestureListener {
 				deactivate();
 			}		
 		} else {
+			// the pattern is not matched
 			deactivate();
 		}
 	}
