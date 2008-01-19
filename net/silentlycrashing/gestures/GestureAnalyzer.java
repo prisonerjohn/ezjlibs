@@ -9,7 +9,7 @@ import processing.core.*;
 
 /**
  * A GestureAnalyzer that listens for a matching gesture after the movement is completed.
- * <p>The analysis algorithm used here is based on the MouseGestures library by Smardec (http://www.smardec.com/products/mouse-gestures.html).</p>
+ * <p>The analysis algorithm used here is based on the <a href="http://www.smardec.com/products/mouse-gestures.html">MouseGestures</a> library by Smardec.</p>
  */
 /* $Id$ */
 public class GestureAnalyzer {
@@ -28,6 +28,8 @@ public class GestureAnalyzer {
 	private Vector startActions;
 	private Vector updateActions;
 	private Vector stopActions;
+	
+	private boolean verbose;
 	
 	/**
 	 * Builds a GestureAnalyzer with default button and grid size.
@@ -67,6 +69,8 @@ public class GestureAnalyzer {
 		startActions = new Vector();
 		updateActions = new Vector();
 		stopActions = new Vector();
+		
+		verbose = false;
 	}
 	
 	/**
@@ -230,6 +234,8 @@ public class GestureAnalyzer {
 	private void reset() {
     	startPoint = null;
         gesture.delete(0, gesture.length());
+        
+        if (verbose) PApplet.println();
     }
 	
 	/**
@@ -245,6 +251,8 @@ public class GestureAnalyzer {
 
         gesture.append(move);
         invokeUpdateActions();
+        
+        if (verbose) PApplet.print(move);
     }
     
     /**
@@ -262,4 +270,6 @@ public class GestureAnalyzer {
     public void setGridSize(int s) { gridSize = s; }
     public String getGesture() { return gesture.toString(); }
     public boolean isRecognized() { return (gesture.length() > 0); }
+    public void setVerbose(boolean v) { verbose = v; }
+    public boolean isVerbose() { return verbose; }
 }
