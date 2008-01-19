@@ -1,4 +1,4 @@
-package net.silentlycrashing.gestures;
+package net.silentlycrashing.gestures.preset;
 
 /**
  * Holds the regex pattern for a clockwise twirl.

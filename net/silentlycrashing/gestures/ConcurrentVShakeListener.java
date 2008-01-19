@@ -1,6 +1,8 @@
 package net.silentlycrashing.gestures;
 
 import java.awt.*;
+
+import net.silentlycrashing.gestures.preset.VShake;
 import processing.core.*;
 
 /**

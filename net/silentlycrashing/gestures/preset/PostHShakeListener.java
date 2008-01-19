@@ -1,6 +1,9 @@
-package net.silentlycrashing.gestures;
+package net.silentlycrashing.gestures.preset;
 
 import java.awt.*;
+
+import net.silentlycrashing.gestures.GestureAnalyzer;
+import net.silentlycrashing.gestures.PostGestureListener;
 import processing.core.*;
 
 /**

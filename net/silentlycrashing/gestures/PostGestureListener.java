@@ -1,6 +1,8 @@
 package net.silentlycrashing.gestures;
 
 import java.awt.*;
+
+import net.silentlycrashing.util.PointInTime;
 import processing.core.*;
 
 /**

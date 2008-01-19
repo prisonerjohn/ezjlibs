@@ -1,4 +1,4 @@
-package net.silentlycrashing.gestures;
+package net.silentlycrashing.util;
 
 import java.awt.*;
 

@@ -1,25 +1,28 @@
-package net.silentlycrashing.gestures;
+package net.silentlycrashing.gestures.preset;
 
 import java.awt.*;
+
+import net.silentlycrashing.gestures.GestureAnalyzer;
+import net.silentlycrashing.gestures.PostGestureListener;
 import processing.core.*;
 
 /**
- * Listens for a counter-clockwise twirl while the movement is being made.
+ * Listens for a vertical shake after the movement is completed.
  */
 /* $Id$ */
-public class ConcurrentCCWTwirlListener extends ConcurrentGestureListener implements CCWTwirl {
+public class PostVShakeListener extends PostGestureListener implements VShake {
 	/**
-	 * Builds a ConcurrentCCWTwirlListener covering the entire canvas.
+	 * Builds a PostVShakeListener covering the entire canvas.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
 	 */
-	public ConcurrentCCWTwirlListener(PApplet parent, GestureAnalyzer analyzer) {
+	public PostVShakeListener(PApplet parent, GestureAnalyzer analyzer) {
 		this(parent, analyzer, new Rectangle(0, 0, parent.width, parent.height));
 	}
 	
 	/**
-	 * Builds a bounded ConcurrentCCWTwirlListener.
+	 * Builds a bounded PostVShakeListener.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
@@ -28,18 +31,18 @@ public class ConcurrentCCWTwirlListener extends ConcurrentGestureListener implem
 	 * @param w the width of the bounding Rectangle
 	 * @param h the height of the bounding Rectangle
 	 */
-	public ConcurrentCCWTwirlListener(PApplet parent, GestureAnalyzer analyzer, int x, int y, int w, int h) {
+	public PostVShakeListener(PApplet parent, GestureAnalyzer analyzer, int x, int y, int w, int h) {
 		this(parent, analyzer, new Rectangle(x, y, w, h));
 	}
 	
 	/**
-	 * Builds a bounded ConcurrentCCWTwirlListener.
+	 * Builds a bounded PostVShakeListener.
 	 * 
 	 * @param parent the parent PApplet
 	 * @param analyzer the linked GestureAnalyzer
 	 * @param bounds the bounding Rectangle
 	 */
-	public ConcurrentCCWTwirlListener(PApplet parent, GestureAnalyzer analyzer, Rectangle bounds) {
-		super(parent, analyzer, CCW_PATTERN, bounds);
+	public PostVShakeListener(PApplet parent, GestureAnalyzer analyzer, Rectangle bounds) {
+		super(parent, analyzer, VS_PATTERN, bounds);
 	}
 }
