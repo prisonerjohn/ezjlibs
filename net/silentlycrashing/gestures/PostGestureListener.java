@@ -54,7 +54,7 @@ public class PostGestureListener extends GestureListener {
 	/** 
 	 * Checks that the gesture is starting in the correct bounds and sets the start point.
 	 * 
-	 * @param p the first PointInTime of the gesture
+	 * @param pt the first PointInTime of the gesture
 	 */
 	public void startListening(PointInTime pt) {
 		reset();
@@ -64,14 +64,14 @@ public class PostGestureListener extends GestureListener {
 	/** 
 	 * Does nothing. This Listener waits until the gesture is complete to analyze it.
 	 * 
-	 * @param p the current PointInTime of the gesture (unused)
+	 * @param pt the current PointInTime of the gesture (unused)
 	 */
 	public void keepListening(PointInTime pt) {}
 	
 	/** 
 	 * Checks if the regex pattern is matched and sets the Listener as active or not.
 	 * 
-	 * @param p the last PointInTime of the gesture
+	 * @param pt the last PointInTime of the gesture
 	 */
 	public void stopListening(PointInTime pt) {
 		if (inBounds) {

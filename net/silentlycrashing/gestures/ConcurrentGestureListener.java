@@ -54,7 +54,7 @@ public class ConcurrentGestureListener extends GestureListener {
 	/** 
 	 * Checks if the regex pattern is matched and sets the Listener as active or not.
 	 * 
-	 * @param p the current PointInTime of the gesture
+	 * @param pt the current PointInTime of the gesture
 	 */
 	public void keepListening(PointInTime pt) {
 		if (inBounds) {
@@ -69,7 +69,7 @@ public class ConcurrentGestureListener extends GestureListener {
 	/** 
 	 * Resets the Listener.
 	 * 
-	 * @param p the last PointInTime of the gesture
+	 * @param pt the last PointInTime of the gesture
 	 */
 	public void stopListening(PointInTime pt) {
 		if (inBounds && active) {

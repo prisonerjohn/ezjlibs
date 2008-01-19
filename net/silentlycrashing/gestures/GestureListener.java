@@ -53,7 +53,7 @@ public abstract class GestureListener {
 	/** 
 	 * Checks that the gesture is starting in the correct bounds and sets the start point.
 	 * 
-	 * @param p the first PointInTime of the gesture
+	 * @param pt the first PointInTime of the gesture
 	 */
 	public void startListening(PointInTime pt) {
 		if (bounds.contains(pt)) {
@@ -67,14 +67,14 @@ public abstract class GestureListener {
 	/** 
 	 * Holds actions to be performed when a new move occurs in the gesture.
 	 * 
-	 * @param p the current PointInTime of the gesture
+	 * @param pt the current PointInTime of the gesture
 	 */
 	public abstract void keepListening(PointInTime pt);
 	
 	/** 
 	 * Holds actions to be performed when a gesture completes.
 	 * 
-	 * @param p the last PointInTime of the gesture
+	 * @param pt the last PointInTime of the gesture
 	 */
 	public abstract void stopListening(PointInTime pt);
 	
