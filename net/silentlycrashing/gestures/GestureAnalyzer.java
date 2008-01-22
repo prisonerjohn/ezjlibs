@@ -1,21 +1,19 @@
 package net.silentlycrashing.gestures;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
-
 import net.silentlycrashing.util.*;
 import processing.core.*;
 
 /**
- * A GestureAnalyzer that listens for a matching gesture after the movement is completed.
+ * Records gestures for analysis by the registered GestureListeners.
  * <p>The analysis algorithm used here is based on the <a href="http://www.smardec.com/products/mouse-gestures.html">MouseGestures</a> library by Smardec.</p>
  * <p>Debugging:<br>
  * The "verbose" flag can be set to print the recorded gestures to standard output.<br>
  * The "debug" flag can be set to plot the key points on the display.</p>
  */
 /* $Id$ */
-public class GestureAnalyzer {
+public abstract class GestureAnalyzer {
 	public static final String LEFT = "L";
 	public static final String RIGHT = "R";
 	public static final String UP = "U";
@@ -25,8 +23,7 @@ public class GestureAnalyzer {
 	
 	protected PApplet p;
 	
-	private int buttonToCheck;
-	private int gridSize;
+	private int minOffset;
 	private Point startPoint;
 	private StringBuffer gesture;
 	
@@ -38,37 +35,15 @@ public class GestureAnalyzer {
 	private boolean debug;
 	
 	/**
-	 * Builds a GestureAnalyzer with default button and grid size.
-	 * 
-	 * @param parent the parent PApplet
-	 */
-	public GestureAnalyzer(PApplet parent) {
-		this(parent, MouseEvent.BUTTON1, 30);
-	}
-	
-	/**
-	 * Builds a GestureAnalyzer with default grid size.
-	 * 
-	 * @param parent the parent PApplet
-	 * @param button the mouse button to check
-	 */
-	public GestureAnalyzer(PApplet parent, int button) {
-		this(parent, button, 30);
-	}
-	
-	/**
 	 * Builds a GestureAnalyzer.
 	 * 
 	 * @param parent the parent PApplet
-	 * @param button the mouse button to check
-	 * @param gSize the grid size
+	 * @param min the minimum offset
 	 */
-	public GestureAnalyzer(PApplet parent, int button, int gSize) {
+	public GestureAnalyzer(PApplet parent, int min) {
 		p = parent;
-		p.registerMouseEvent(this);
+		minOffset = min;
 		
-		buttonToCheck = button;
-		gridSize = gSize;
 		startPoint = null;
 		gesture = new StringBuffer();
 		
@@ -145,39 +120,6 @@ public class GestureAnalyzer {
         	stopAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
         }
     }
-	
-	/**
-     * Handles a MouseEvent.
-     * <p>Registered to be called automatically by the PApplet.</p>
-     * 
-     * @param event the incoming MouseEvent
-     */
-	public void mouseEvent(MouseEvent event) {
-		if ((event.getButton() != buttonToCheck) && (event.getButton() != MouseEvent.NOBUTTON)) {
-			return;
-		}
-		
-		switch (event.getID()) {
-			case MouseEvent.MOUSE_PRESSED:
-				start(event.getPoint());
-				break;
-			case MouseEvent.MOUSE_RELEASED:
-				stop(event.getPoint());
-				break;
-			case MouseEvent.MOUSE_CLICKED:
-				break;
-			case MouseEvent.MOUSE_DRAGGED:
-				try {
-					update(event.getPoint());
-				} catch (NullPointerException e) {
-					// XXX only happens on Windows, I think it's related to this NOBUTTON shit
-					System.out.println("StartPoint is missing...");
-				}
-				break;
-			case MouseEvent.MOUSE_MOVED:
-				break;
-		}
-	}
 
 	/** 
 	 * Sets the start Point and invokes all start RegisteredActions.
@@ -202,7 +144,7 @@ public class GestureAnalyzer {
 		int dXAbs = Math.abs(dX);
 		int dYAbs = Math.abs(dY);
 
-        if ((dXAbs < gridSize) && (dYAbs < gridSize)) {
+        if ((dXAbs < minOffset) && (dYAbs < minOffset)) {
         	// the points are too close together
         	return;
         }
@@ -280,8 +222,8 @@ public class GestureAnalyzer {
     	return getGesture().matches(regex);
     }
     
-    public int getGridSize() { return gridSize; }
-    public void setGridSize(int s) { gridSize = s; }
+    public int getMinOffset() { return minOffset; }
+    public void setMinOffset(int m) { minOffset = m; }
     public String getGesture() { return gesture.toString(); }
     public boolean isRecognized() { return (gesture.length() > 0); }
     public void setVerbose(boolean v) { verbose = v; }
