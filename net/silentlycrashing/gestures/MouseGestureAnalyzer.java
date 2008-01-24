@@ -4,7 +4,7 @@ import java.awt.event.*;
 import processing.core.*;
 
 /**
- * Records gestures made using the mouse for analysis by the registered GestureListeners.
+ * Records gestures made using the mouse for analysis.
  */
 /* $Id$ */
 public class MouseGestureAnalyzer extends GestureAnalyzer {
