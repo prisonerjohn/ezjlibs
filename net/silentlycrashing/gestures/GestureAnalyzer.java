@@ -13,7 +13,7 @@ import processing.core.*;
  * The "debug" flag can be set to plot the key points on the display.</p>
  */
 /* $Id$ */
-public abstract class GestureAnalyzer {
+public class GestureAnalyzer {
 	public static final String LEFT = "L";
 	public static final String RIGHT = "R";
 	public static final String UP = "U";
