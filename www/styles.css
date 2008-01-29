@@ -1,0 +1,36 @@
+/* ezGestures styles */
+
+body { 
+	font-family: verdana, arial, helvetica, sans-serif;  
+	color: #003333;
+	margin: 10px;
+	padding: 0;
+}
+
+p {
+	font-size: 12px;
+	margin-top: 0;
+	margin-bottom: 15px;
+	text-align: justify;
+}
+
+.main {
+	background: url('logo.gif') no-repeat left top; 
+	padding-left: 320px;
+	padding-top: 20px;
+	width: 450px;
+}
+
+.title {
+	font-size: 28px;
+	top: 30px;
+	left: 10px;
+}
+
+.big {
+	font-size: 16px;
+	margin-bottom: 10px 0 10px 0;
+}
+
+a, a:link, a:active, a:visited { color: #CC3300; text-decoration: none; }
+a:hover { color: #CC3300; text-decoration: underline; }
