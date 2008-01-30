@@ -3,7 +3,7 @@
 /* Define colors, fonts and other style attributes here to override the defaults */
 
 /* Page background color */
-body { background-color: #FFFFFF; font-family: Verdana, Helvetica, Arial, sans-serif; font-size: 14px; }
+body { background-color: #FFFFFF; color: #003333; font-family: Verdana, Helvetica, Arial, sans-serif; font-size: 14px; }
 
 /* Headings */
 h1 { font-size: 10px; }
