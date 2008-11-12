@@ -46,9 +46,9 @@ public class GestureAnalyzer {
 	private Point startPoint;
 	private StringBuffer gesture;
 	
-	private Vector startActions;
-	private Vector updateActions;
-	private Vector stopActions;
+	private Vector<RegisteredAction> startActions;
+	private Vector<RegisteredAction> updateActions;
+	private Vector<RegisteredAction> stopActions;
 	
 	private boolean verbose;
 	private boolean debug;
@@ -66,9 +66,9 @@ public class GestureAnalyzer {
 		startPoint = null;
 		gesture = new StringBuffer();
 		
-		startActions = new Vector();
-		updateActions = new Vector();
-		stopActions = new Vector();
+		startActions = new Vector<RegisteredAction>();
+		updateActions = new Vector<RegisteredAction>();
+		stopActions = new Vector<RegisteredAction>();
 		
 		verbose = false;
 		debug = false;
@@ -90,8 +90,8 @@ public class GestureAnalyzer {
      */
     public void invokeStartActions() {
     	RegisteredAction startAction;
-        for (Iterator i = startActions.iterator(); i.hasNext();) {
-        	startAction = (RegisteredAction)i.next();
+        for (Iterator<RegisteredAction> i = startActions.iterator(); i.hasNext();) {
+        	startAction = i.next();
     		startAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
         }   
     }
@@ -112,8 +112,8 @@ public class GestureAnalyzer {
      */
     public void invokeUpdateActions() {
     	RegisteredAction updateAction;
-        for (Iterator i = updateActions.iterator(); i.hasNext();) {
-        	updateAction = (RegisteredAction)i.next();
+        for (Iterator<RegisteredAction> i = updateActions.iterator(); i.hasNext();) {
+        	updateAction = i.next();
         	updateAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
         }
     }
@@ -134,8 +134,8 @@ public class GestureAnalyzer {
      */
     public void invokeStopActions() {
     	RegisteredAction stopAction;
-        for (Iterator i = stopActions.iterator(); i.hasNext();) {
-        	stopAction = (RegisteredAction)i.next();
+        for (Iterator<RegisteredAction> i = stopActions.iterator(); i.hasNext();) {
+        	stopAction = i.next();
         	stopAction.invoke(new Object[] { new PointInTime(startPoint, p.frameCount) });
         }
     }
