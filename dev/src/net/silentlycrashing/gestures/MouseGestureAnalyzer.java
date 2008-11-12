@@ -20,6 +20,7 @@
 package net.silentlycrashing.gestures;
 
 import java.awt.event.*;
+
 import processing.core.*;
 
 /**
@@ -35,7 +36,7 @@ public class MouseGestureAnalyzer extends GestureAnalyzer {
 	 * @param parent the parent PApplet
 	 */
 	public MouseGestureAnalyzer(PApplet parent) {
-		this(parent, MouseEvent.BUTTON1, 30);
+		this(parent, PConstants.LEFT, 30);
 	}
 	
 	/**
@@ -69,7 +70,17 @@ public class MouseGestureAnalyzer extends GestureAnalyzer {
      * @param event the incoming MouseEvent
      */
 	public void mouseEvent(MouseEvent event) {
-		if ((event.getButton() != buttonToCheck) && (event.getButton() != MouseEvent.NOBUTTON)) {
+		int eventButton = 0;
+		int modifiers = event.getModifiers();
+	    if ((modifiers & InputEvent.BUTTON1_MASK) != 0) {
+	    	eventButton = PConstants.LEFT;
+	    } else if ((modifiers & InputEvent.BUTTON2_MASK) != 0) {
+	    	eventButton = PConstants.CENTER;
+	    } else if ((modifiers & InputEvent.BUTTON3_MASK) != 0) {
+	    	eventButton = PConstants.RIGHT;
+	    }
+
+		if (eventButton != buttonToCheck) {
 			return;
 		}
 		
