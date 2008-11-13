@@ -44,8 +44,6 @@
     	<jar destfile="../lib/ezgestures.jar" basedir="../bin"/>
   	</target>
 	
-	
-	
     <target name="javadoc">
 	    <mkdir dir="../doc"/>
 		
@@ -70,11 +68,30 @@
 			<classpath refid="oscp5.classpath"/>
 	    </javadoc>
 	</target>
+	
+	<target name="package" 
+	        depends="jar">
+		<mkdir dir="../ezgestures"/>
+		<mkdir dir="../ezgestures/library"/>
+		
+		
+		<copy file="../lib/ezgestures.jar" tofile="../ezgestures/library/ezgestures.jar"/>
+		<copy todir="../ezgestures/examples">
+	        <fileset dir="../examples"/>
+		</copy>
+ 
+		<zip destfile="../ezgestures.zip">
+		 	<fileset dir="../ezgestures"/>
+		</zip>
+		
+		<delete dir="../ezgestures"/>
+    </target>
 
    	<target name="clean">
     	<delete dir="../bin"/>
    		<delete dir="../lib"/>
     	<delete dir="../doc"/>
+   		<delete file="../ezgestures.zip"/>
   	</target>
 	
 </project>
