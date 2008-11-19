@@ -97,7 +97,7 @@
     	<delete dir="../bin"/>
    		<delete dir="../lib"/>
     	<delete dir="../doc"/>
-   		<delete file="../ezgestures-$Rev$.zip"/>
+   		<delete file="../ezgestures.zip"/>
   	</target>
 	
 </project>
