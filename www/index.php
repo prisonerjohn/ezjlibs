@@ -21,8 +21,9 @@
 			
 		<p>If you're going to analyze <a href="http://en.wikipedia.org/wiki/Wii_Remote">Wiimote</a> gestures, you'll need to install Andreas Schlegel's <a href="http://www.sojamo.de/libraries/oscP5/">oscP5</a> library, and you'll need to run his <a href="http://code.google.com/p/darwiinosc/">darwiinosc</a> application.</p>
 		
-		<p><span class="big">Download the <a href="http://ezjlibs.googlecode.com/files/ezgestures-0.36.zip">library</a></span><br/>
-			version .36<br/>
+		<p><span class="big">Download the <a href="http://ezjlibs.googlecode.com/files/ezgestures-0.38.zip">library</a></span><br/>
+			version .38<br/>
+			updated on Nov 19 2008<br/>
 			unzip and drop the folder in /path/to/processing/libraries/</p>
 		
 		<p class="big">Consult the <a href="doc/">documentation</a></p>

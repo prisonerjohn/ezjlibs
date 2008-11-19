@@ -2,15 +2,16 @@
 	<!-- $Id$ -->
 	
 	<description>
-	    This project builds the ezGestures library for Processing.  Just run "ant" and it 
-	    will put a jar file in the lib directory.  This jar should be moved to 
-	    "path/to/processing/libraries/ezgestures/library/" for use in the Processing IDE.
+	    This project builds the ezGestures library for Processing.  Just run 
+		"ant" and it will put a jar file in the lib directory.  This jar should 
+		be moved to "path/to/processing/libraries/ezgestures/library/" for use 
+		in the Processing IDE.
 	</description>
 	
 	<fileset id="ezgestures.fileset"
 	         dir="../src" 
 		     casesensitive="yes">
-	    <exclude name="com/knowledgebooks/nlp/"/>
+	    <exclude name="com/"/>
 		<exclude name="net/silentlycrashing/dictionary/"/>
 	    <exclude name="net/silentlycrashing/gestures/ShakeListener.java"/>
 	    <exclude name="net/silentlycrashing/gestures/TimedGestureListener.java"/>       
@@ -44,7 +45,7 @@
     	<jar destfile="../lib/ezgestures.jar" basedir="../bin"/>
   	</target>
 	
-    <target name="javadoc">
+    <target name="doc">
 	    <mkdir dir="../doc"/>
 		
 		<javadoc access="private" 
@@ -70,14 +71,19 @@
 	</target>
 	
 	<target name="package" 
-	        depends="jar">
+	        depends="jar,doc">
 		<mkdir dir="../ezgestures"/>
 		<mkdir dir="../ezgestures/library"/>
-		
 		
 		<copy file="../lib/ezgestures.jar" tofile="../ezgestures/library/ezgestures.jar"/>
 		<copy todir="../ezgestures/examples">
 	        <fileset dir="../examples"/>
+		</copy>
+		<copy todir="../ezgestures/reference">
+		    <fileset dir="../doc"/>
+		</copy>
+		<copy todir="../ezgestures/src">
+		    <fileset refid="ezgestures.fileset"/>
 		</copy>
  
 		<zip destfile="../ezgestures.zip">
@@ -91,7 +97,7 @@
     	<delete dir="../bin"/>
    		<delete dir="../lib"/>
     	<delete dir="../doc"/>
-   		<delete file="../ezgestures.zip"/>
+   		<delete file="../ezgestures-$Rev$.zip"/>
   	</target>
 	
 </project>
