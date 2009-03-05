@@ -1,10 +1,12 @@
 package net.silentlycrashing.ai3;
 
-import java.util.ArrayList;
-
 import processing.core.*;
 
 public class AI3Shape extends AI3AbstractShape {
+    
+    public AI3Shape(AI3Shape _shape) {
+        super(_shape);
+    }
     
     public AI3Shape(String _filePath, PApplet _p) {
         super();
