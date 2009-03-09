@@ -1,0 +1,107 @@
+<project name="ezGestures" default="jar">
+	<!-- $Id$ -->
+	
+	<description>
+	    This project builds the ezGestures library for Processing.  Just run 
+		"ant" and it will put a jar file in the lib directory.  This jar should 
+		be moved to "path/to/processing/libraries/ezgestures/library/" for use 
+		in the Processing IDE.
+	</description>
+	
+	<fileset id="ezgestures.fileset"
+	         dir="../src" 
+		     casesensitive="yes">
+	    <!--<exclude name="com/"/>
+		<exclude name="net/silentlycrashing/dictionary/"/>-->
+		<exclude name="net/silentlycrashing/ai3/"/>
+		<exclude name="net/silentlycrashing/vines/"/>
+	    <exclude name="net/silentlycrashing/gestures/ShakeListener.java"/>
+	    <exclude name="net/silentlycrashing/gestures/TimedGestureListener.java"/>       
+	    <exclude name="net/silentlycrashing/util/MiscMath.java"/>
+	</fileset>
+		
+	<path id="processing.classpath">
+	    <pathelement location="/Developer/Applications/Java/Processing.app/Contents/Resources/Java/core.jar"/>
+	</path>
+	<path id="oscp5.classpath">
+	    <pathelement location="/Users/ez/Documents/Processing/libraries/oscP5/library/oscP5.jar"/>
+	</path>
+
+	<target name="jar">
+		<mkdir dir="../bin"/>
+    	<mkdir dir="../lib"/>
+
+    	<javac srcdir="../src"
+    		   destdir="../bin"
+               deprecation="true"
+               debug="true">
+    		<!--<exclude name="com/knowledgebooks/nlp/"/>
+    		<exclude name="net/silentlycrashing/dictionary/"/>-->
+    	    <exclude name="net/silentlycrashing/ai3/"/>
+    		<exclude name="net/silentlycrashing/vines/"/>
+    		<exclude name="net/silentlycrashing/gestures/ShakeListener.java"/>
+    		<exclude name="net/silentlycrashing/gestures/TimedGestureListener.java"/>       
+    		<exclude name="net/silentlycrashing/util/MiscMath.java"/>
+      		<classpath refid="processing.classpath"/>
+    		<classpath refid="oscp5.classpath"/>
+    	</javac>
+
+    	<jar destfile="../lib/ezgestures.jar" basedir="../bin"/>
+  	</target>
+	
+    <target name="doc">
+	    <mkdir dir="../doc"/>
+		
+		<javadoc access="private" 
+			     author="true" 
+			     destdir="../doc" 
+			     doctitle="ezGestures" 
+			     nodeprecated="false" 
+			     nodeprecatedlist="false" 
+			     noindex="false" 
+			     nonavbar="false" 
+			     notree="false" 
+			     source="1.5" 
+			     splitindex="true" 
+			     stylesheetfile="stylesheet.css" 
+			     use="true" 
+			     version="true">
+		    <fileset refid="ezgestures.fileset"/>
+			<link href="http://dev.processing.org/reference/everything/javadoc/"/>
+			<link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+			<classpath refid="processing.classpath"/>
+			<classpath refid="oscp5.classpath"/>
+	    </javadoc>
+	</target>
+	
+	<target name="package" 
+	        depends="jar,doc">
+		<mkdir dir="../ezgestures"/>
+		<mkdir dir="../ezgestures/library"/>
+		
+		<copy file="../lib/ezgestures.jar" tofile="../ezgestures/library/ezgestures.jar"/>
+		<copy todir="../ezgestures/examples">
+	        <fileset dir="../examples"/>
+		</copy>
+		<copy todir="../ezgestures/reference">
+		    <fileset dir="../doc"/>
+		</copy>
+		<copy todir="../ezgestures/src">
+		    <fileset refid="ezgestures.fileset"/>
+		</copy>
+ 
+		<zip destfile="../ezgestures.zip">
+		 	<fileset dir="../ezgestures"/>
+		</zip>
+		
+		<delete dir="../ezgestures"/>
+    </target>
+
+   	<target name="clean">
+    	<delete dir="../bin"/>
+   		<delete dir="../lib"/>
+    	<delete dir="../doc"/>
+   		<delete file="../ezgestures.zip"/>
+  	</target>
+	
+</project>

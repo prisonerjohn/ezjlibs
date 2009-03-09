@@ -1,0 +1,98 @@
+<project name="ezAI3" default="jar">
+	<!-- $Id: build.xml 39 2008-11-19 15:06:04Z prisonerjohn $ -->
+	
+	<description>
+	    This project builds the ezAI3 library for Processing.  Just run 
+		"ant" and it will put a jar file in the lib directory.  This jar should 
+		be moved to "path/to/processing/libraries/ai3/library/" for use 
+		in the Processing IDE.
+	</description>
+	
+	<fileset id="ezai3.fileset"
+	         dir="../src" 
+		     casesensitive="yes">
+		<exclude name="com/"/>
+		<exclude name="net/silentlycrashing/dictionary/"/>
+		<exclude name="net/silentlycrashing/gestures/"/>
+		<exclude name="net/silentlycrashing/util/"/>
+		<exclude name="net/silentlycrashing/vines/"/>
+	</fileset>
+		
+	<path id="processing.classpath">
+	    <pathelement location="/Developer/Applications/Java/Processing.app/Contents/Resources/Java/core.jar"/>
+	</path>
+
+	<target name="jar">
+		<mkdir dir="../bin"/>
+    	<mkdir dir="../lib"/>
+
+    	<javac srcdir="../src/net/silentlycrashing/ai3"
+    		   destdir="../bin"
+               deprecation="true"
+               debug="true">
+    		<exclude name="com/"/>
+    		<exclude name="net/silentlycrashing/dictionary/"/>
+    		<exclude name="net/silentlycrashing/gestures/"/>
+    		<exclude name="net/silentlycrashing/util/"/>
+    		<exclude name="net/silentlycrashing/vines/"/>
+      		<classpath refid="processing.classpath"/>
+    	</javac>
+
+    	<jar destfile="../lib/ezai3.jar" basedir="../bin"/>
+  	</target>
+	
+    <!--<target name="doc">
+	    <mkdir dir="../doc"/>
+		
+		<javadoc access="private" 
+			     author="true" 
+			     destdir="../doc" 
+			     doctitle="ezAI3" 
+			     nodeprecated="false" 
+			     nodeprecatedlist="false" 
+			     noindex="false" 
+			     nonavbar="false" 
+			     notree="false" 
+			     source="1.5" 
+			     splitindex="true" 
+			     stylesheetfile="stylesheet.css" 
+			     use="true" 
+			     version="true">
+		    <fileset refid="ezai3.fileset"/>
+			<link href="http://dev.processing.org/reference/everything/javadoc/"/>
+			<link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+			<classpath refid="processing.classpath"/>
+	    </javadoc>
+	</target>-->
+	
+	<target name="package" 
+	        depends="jar"><!--depends="jar,doc">-->
+		<mkdir dir="../ezai3"/>
+		<mkdir dir="../ezai3/library"/>
+		
+		<copy file="../lib/ezai3.jar" tofile="../ezai3/library/ezai3.jar"/>
+		<!--<copy todir="../ezai3/examples">
+	        <fileset dir="../examples"/>
+		</copy>
+		<copy todir="../ezai3/reference">
+		    <fileset dir="../doc"/>
+		</copy>-->
+		<copy todir="../ezai3/src">
+		    <fileset refid="ezai3.fileset"/>
+		</copy>
+ 
+		<zip destfile="../ezai3.zip">
+		 	<fileset dir="../ezai3"/>
+		</zip>
+		
+		<delete dir="../ezai3"/>
+    </target>
+
+   	<target name="clean">
+    	<delete dir="../bin"/>
+   		<delete dir="../lib"/>
+    	<!--<delete dir="../doc"/>-->
+   		<delete file="../ezai3.zip"/>
+  	</target>
+	
+</project>
