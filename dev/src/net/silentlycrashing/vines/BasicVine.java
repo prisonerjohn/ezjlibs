@@ -5,15 +5,17 @@ import java.util.*;
 import processing.core.*;
 import toxi.geom.*;
 
-public class BasicVine {
+public class BasicVine extends Vines {
     
-    public static PApplet p;
-    public static void init(PApplet _p) {
-        p = _p;
-    }
+    //-----------------------------------------------------
+    public final static int RECALC_PTS = 4;
     
     public final static int DEFAULT_RES = 4;
+    public final static int DEFAULT_MIN_DIST = 30;
+    public final static int DEFAULT_MAX_DIST = 60;
+    public final static float DEFAULT_D_SLOPE = 0.5f;
     
+    //-----------------------------------------------------
     public BernsteinPolynomial bernstein;
     
     protected int numPts;
@@ -24,16 +26,36 @@ public class BasicVine {
     protected List<PVector> coeffA;
     protected List<Float> bi;
     
-    protected List<PVector> vertices;
+    protected List<VinePoint> vertices;
     
     private PVector deltaP;
     private PVector deltaQ;
     
+    //-----------------------------------------------------
+    // Least Points variables
+    protected boolean useLeastPoints;
+    
+    private int minDistance = DEFAULT_MIN_DIST;
+    private int maxDistance = DEFAULT_MAX_DIST;
+    private float deltaSlope = DEFAULT_D_SLOPE;
+    
+    protected PVector lastPt;
+    protected PVector beforeLastPt;
+    
+    //-----------------------------------------------------
     public BasicVine() {
-        this(DEFAULT_RES);
+        this(DEFAULT_RES, true);
     }
     
+  //-----------------------------------------------------
     public BasicVine(int _res) {
+        this(_res, true);
+    }
+    
+    //-----------------------------------------------------
+    public BasicVine(int _res, boolean _useLeastPoints) {
+        useLeastPoints = _useLeastPoints;
+        
         bernstein = new BernsteinPolynomial(_res);
         clear();
         
@@ -41,17 +63,82 @@ public class BasicVine {
         deltaQ = new PVector();
     }
     
+    //-----------------------------------------------------
+    public void initLeastPoints(int _minDistance, int _maxDistance, float _deltaSlope) {
+        minDistance = _minDistance;
+        maxDistance = _maxDistance;
+        deltaSlope = _deltaSlope;
+        useLeastPoints = true;
+    }
+    
+    //-----------------------------------------------------
     public boolean addPoint(PVector _pt) {
+        if (useLeastPoints) {
+            // if the new point is far enough from the last key point...
+            float d = lastPt.dist(_pt);
+            if (d > minDistance) {
+                // ...AND there are less than 2 key points total
+                if (numPts < 2 || 
+                        // ...OR the new point is too far away from the last point
+                        d < maxDistance ||
+                        // ...OR the slope between the new point and the last key point is 
+                        //    different enough from the slope between the last 2 key points...
+                        Math.abs(slope(_pt, lastPt) - slope(lastPt, beforeLastPt)) > deltaSlope) {
+                    // ...add a new key point
+                    beforeLastPt = lastPt;
+                    lastPt = _pt;
+                    
+                    addPointAndUpdate(_pt);
+                    return true;
+                }
+            }
+
+            return false;
+            
+        } else {
+            addPointAndUpdate(_pt);
+            return true;
+        }
+    }
+    
+    //-----------------------------------------------------
+    public void render() {
+        p.beginShape();
+        for (VinePoint vp : vertices) {
+            p.vertex(vp.x, vp.y);
+        }
+        p.endShape();
+    }
+    
+    //-----------------------------------------------------
+    public void clear() {
+        pts = new LinkedList<PVector>();
+        delta = new LinkedList<PVector>();
+        coeffA = new LinkedList<PVector>();
+        bi = new LinkedList<Float>();
+        vertices = new LinkedList<VinePoint>();
+        numPts = 0;
+        
+        lastPt = new PVector();
+        beforeLastPt = new PVector();
+    }
+    
+    //-----------------------------------------------------
+    public int getNumPoints() {
+        return numPts;
+    }
+    
+    //-----------------------------------------------------
+    private void addPointAndUpdate(PVector _pt) {
         // add the point
         pts.add(_pt);
         numPts++;
         
         updateCPoints(_pt);
         updateVertices();
-        
-        return true;
     }
     
+    //-----------------------------------------------------
     private void updateCPoints(PVector _pt) {
         if (numPts == 1) {
             delta.add(new PVector());
@@ -92,7 +179,7 @@ public class BasicVine {
             ));
             
             // set the delta value for the last points until the first one
-            for (int i= numPts - 2; i > 0; i--) {
+            for (int i = numPts - 2; i > Math.max(0, numPts - 2 - RECALC_PTS); i--) {
                 PVector dCurr = delta.get(i);
                 PVector cCurr = coeffA.get(i);
                 PVector dPost = delta.get(i+1);
@@ -106,10 +193,17 @@ public class BasicVine {
         }  
     }
     
+    //-----------------------------------------------------
     private void updateVertices() {
-        vertices.clear();
+        if (numPts > RECALC_PTS) {
+            // delete the vertices corresponding to the last RECALC_PTS pts
+            // we re-calculate them below
+            for (int i=0; i < (RECALC_PTS-1)*bernstein.resolution; i++) {
+                vertices.remove(vertices.size()-1);
+            }
+        }
         
-        for (int i = 0; i < numPts - 1; i++) {
+        for (int i = Math.max(0, numPts - (RECALC_PTS+1)); i < numPts - 1; i++) {
             PVector p = pts.get(i);
             PVector q = pts.get(i + 1);
             deltaP.set(delta.get(i));
@@ -122,29 +216,19 @@ public class BasicVine {
                         + deltaQ.x * bernstein.b2[k] + q.x * bernstein.b3[k];
                 float y = p.y * bernstein.b0[k] + deltaP.y * bernstein.b1[k]
                         + deltaQ.y * bernstein.b2[k] + q.y * bernstein.b3[k];
-                vertices.add(new PVector(x, y));
+                vertices.add(new VinePoint(x, y));
             }
         }
     }
     
-    public void render() {
-        p.beginShape();
-        for (PVector v : vertices) {
-            p.vertex(v.x, v.y);
-        }
-        p.endShape();
+    //-----------------------------------------------------
+    private static float slope(PVector _v1, PVector _v2) {
+        return slope(_v1.x, _v1.y, _v2.x, _v2.y);
     }
     
-    public void clear() {
-        pts = new LinkedList<PVector>();
-        delta = new LinkedList<PVector>();
-        coeffA = new LinkedList<PVector>();
-        bi = new LinkedList<Float>();
-        vertices = new LinkedList<PVector>();
-        numPts = 0;
-    }
-    
-    public int getNumPoints() {
-        return numPts;
+    //-----------------------------------------------------
+    private static float slope(float _x1, float _y1, float _x2, float _y2) {
+        if (_x2 - _x1 == 0) return 0;  // avoid division by 0!
+        return (_y2 - _y1) / (_x2 - _x1);
     }
 }
