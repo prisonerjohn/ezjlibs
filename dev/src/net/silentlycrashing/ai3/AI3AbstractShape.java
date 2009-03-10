@@ -64,18 +64,35 @@ public class AI3AbstractShape extends AI3 {
         y = _y;
     }
     
+    public void scale(float _s) {
+        for (AI3Point pt : pts) {
+            if (pt instanceof AI3BeginPoint || pt instanceof AI3EdgePoint) {
+                pt.x = PApplet.lerp(x, pt.x, _s);
+                pt.y = PApplet.lerp(y, pt.y, _s);
+            } else if (pt instanceof AI3BezierPoint) {
+                AI3BezierPoint ptb = (AI3BezierPoint)pt;
+                ptb.x = PApplet.lerp(x, ptb.x, _s);
+                ptb.y = PApplet.lerp(y, ptb.y, _s);
+                ptb.cx1 = PApplet.lerp(x, ptb.cx1, _s);
+                ptb.cy1 = PApplet.lerp(y, ptb.cy1, _s);
+                ptb.cx2 = PApplet.lerp(x, ptb.cx2, _s);
+                ptb.cy2 = PApplet.lerp(y, ptb.cy2, _s);
+            }
+        }
+    }
+    
     public void info() {
         PApplet.println("-------------- AI3Shape INFO -------------");
-        PApplet.println("--- Dimensions\t[" + w + ", " + h + "]");
+                PApplet.println("--- Dimensions [" + w + ", " + h + "]");
         for (AI3Point pt : pts) {
             if (pt instanceof AI3BeginPoint) {
-                PApplet.println("-\tBegin\t(" + pt.x + ",\t" + pt.y + ")");
+                PApplet.println("------ Begin   (" + PApplet.nfc(pt.x, 7) + ", " + PApplet.nfc(pt.y, 7) + ")");
             } else if (pt instanceof AI3EdgePoint) {
-                PApplet.println("-\tEdge\t(" + pt.x + ",\t" + pt.y + ")");
+                PApplet.println("------ Edge    (" + PApplet.nfc(pt.x, 7) + ", " + PApplet.nfc(pt.y, 7) + ")");
             } else if (pt instanceof AI3BezierPoint) {
-                PApplet.println("-\tBezier\t(" + pt.x + ",\t" + pt.y + ")\t(" + ((AI3BezierPoint)pt).cx1 + ",\t" + ((AI3BezierPoint)pt).cy1 + ")\t(" + ((AI3BezierPoint)pt).cx2 + ",\t" + ((AI3BezierPoint)pt).cy2 + ")");
+                PApplet.println("------ Bezier  (" + PApplet.nfc(pt.x, 7) + ", " + PApplet.nfc(pt.y, 7) + ")\t(" + PApplet.nfc(((AI3BezierPoint)pt).cx1, 7) + ", " + PApplet.nfc(((AI3BezierPoint)pt).cy1, 7) + ")\t(" + PApplet.nfc(((AI3BezierPoint)pt).cx2, 7) + ", " + PApplet.nfc(((AI3BezierPoint)pt).cy2, 7) + ")");
             } else if (pt instanceof AI3EndPoint) {
-                PApplet.println("-\tEnd");
+                PApplet.println("------ End");
             }
         }       
         PApplet.println("------------------------------------------");
