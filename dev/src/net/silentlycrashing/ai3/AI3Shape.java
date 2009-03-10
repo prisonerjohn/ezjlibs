@@ -8,13 +8,13 @@ public class AI3Shape extends AI3AbstractShape {
         super(_shape);
     }
     
-    public AI3Shape(String _filePath, PApplet _p) {
+    public AI3Shape(String _filePath) {
         super();
-        load(_filePath, _p);
+        load(_filePath);
     }
 
-    private void load(String _filePath, PApplet _p) {
-        String fullText = (PApplet.join(_p.loadStrings(_filePath), "\n"));
+    private void load(String _filePath) {
+        String fullText = (PApplet.join(p.loadStrings(_filePath), "\n"));
         String[] dimensions = PApplet.split(PApplet.trim(PApplet.split(PApplet.split(fullText, "%%BoundingBox:")[1], "%%")[0]), " ");
         int tmpX = Integer.parseInt(dimensions[0]);
         int tmpY = Integer.parseInt(dimensions[1]);

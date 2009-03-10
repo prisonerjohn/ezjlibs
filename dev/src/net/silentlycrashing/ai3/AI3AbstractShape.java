@@ -66,6 +66,7 @@ public class AI3AbstractShape extends AI3 {
     
     public void info() {
         PApplet.println("-------------- AI3Shape INFO -------------");
+        PApplet.println("--- Dimensions\t[" + w + ", " + h + "]");
         for (AI3Point pt : pts) {
             if (pt instanceof AI3BeginPoint) {
                 PApplet.println("-\tBegin\t(" + pt.x + ",\t" + pt.y + ")");
