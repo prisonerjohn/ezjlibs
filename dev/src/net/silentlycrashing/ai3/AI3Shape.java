@@ -16,10 +16,10 @@ public class AI3Shape extends AI3AbstractShape {
     private void load(String _filePath, PApplet _p) {
         String fullText = (PApplet.join(_p.loadStrings(_filePath), "\n"));
         String[] dimensions = PApplet.split(PApplet.trim(PApplet.split(PApplet.split(fullText, "%%BoundingBox:")[1], "%%")[0]), " ");
-        x = Integer.parseInt(dimensions[0]);
-        y = Integer.parseInt(dimensions[1]);
-        w = Integer.parseInt(dimensions[2]) - x;
-        h = Integer.parseInt(dimensions[3]) - y;
+        int tmpX = Integer.parseInt(dimensions[0]);
+        int tmpY = Integer.parseInt(dimensions[1]);
+        w = Integer.parseInt(dimensions[2]) - tmpX;
+        h = Integer.parseInt(dimensions[3]) - tmpY;
 
         String data[] = PApplet.split(PApplet.trim(PApplet.split(PApplet.split(fullText, "%%EndSetup")[1], "%%PageTrailer")[0]), "\n");
         for (int i=0; i < data.length; i++) {
@@ -27,24 +27,24 @@ public class AI3Shape extends AI3AbstractShape {
             char mode = params[params.length - 1].toLowerCase().charAt(0);
 
             if (mode == 'm') {
-                float x1 = Float.parseFloat(params[0]);
-                float y1 = Float.parseFloat(params[1]);
+                float x1 = Float.parseFloat(params[0]) - tmpX;
+                float y1 = h - Float.parseFloat(params[1]) + tmpY;
                 pts.add(new AI3BeginPoint(x1, y1));
             }
 
             else if (mode == 'l') {
-                float x1 = Float.parseFloat(params[0]);
-                float y1 = Float.parseFloat(params[1]);
+                float x1 = Float.parseFloat(params[0]) - tmpX;
+                float y1 = h - Float.parseFloat(params[1]) + tmpY;
                 pts.add(new AI3EdgePoint(x1, y1));
             }
 
             else if (mode == 'c') {
-                float cx1 = Float.parseFloat(params[0]);
-                float cy1 = Float.parseFloat(params[1]);
-                float cx2 = Float.parseFloat(params[2]);
-                float cy2 = Float.parseFloat(params[3]);
-                float x2  = Float.parseFloat(params[4]);
-                float y2  = Float.parseFloat(params[5]);
+                float cx1 = Float.parseFloat(params[0]) - tmpX;
+                float cy1 = h - Float.parseFloat(params[1]) + tmpY;
+                float cx2 = Float.parseFloat(params[2]) - tmpX;
+                float cy2 = h - Float.parseFloat(params[3]) + tmpY;
+                float x2  = Float.parseFloat(params[4]) - tmpX;
+                float y2  = h - Float.parseFloat(params[5]) + tmpY;
 
                 pts.add(new AI3BezierPoint(x2, y2, cx1, cy1, cx2, cy2));
             }

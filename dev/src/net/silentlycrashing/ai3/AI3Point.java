@@ -1,8 +1,6 @@
 package net.silentlycrashing.ai3;
 
-import processing.core.*;
-
-public abstract class AI3Point {
+public abstract class AI3Point extends AI3 {
 
     public float x;
     public float y;
@@ -12,5 +10,5 @@ public abstract class AI3Point {
         y = _y;
     }
 
-    public abstract void render(PApplet _p);
+    public abstract void render();
 }

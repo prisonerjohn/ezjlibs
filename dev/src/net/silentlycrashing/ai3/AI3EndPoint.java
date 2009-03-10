@@ -1,7 +1,5 @@
 package net.silentlycrashing.ai3;
 
-import processing.core.*;
-
 public class AI3EndPoint extends AI3Point {
 
     public AI3EndPoint() {
@@ -9,9 +7,8 @@ public class AI3EndPoint extends AI3Point {
     }
 
     @Override
-    public void render(PApplet _p) {
-        // TODO Auto-generated method stub
-        _p.endShape();
+    public void render() {
+        p.endShape();
     }
 
 }

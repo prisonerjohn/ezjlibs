@@ -1,7 +1,5 @@
 package net.silentlycrashing.ai3;
 
-import processing.core.*;
-
 public class AI3BezierPoint extends AI3Point {
 
     public float cx1;
@@ -19,8 +17,8 @@ public class AI3BezierPoint extends AI3Point {
     }
 
     @Override
-    public void render(PApplet _p) {
-        _p.bezierVertex(cx1, cy1, cx2, cy2, x, y);
+    public void render() {
+        p.bezierVertex(cx1, cy1, cx2, cy2, x, y);
     }
 
 }

@@ -1,7 +1,5 @@
 package net.silentlycrashing.ai3;
 
-import processing.core.*;
-
 public class AI3BeginPoint extends AI3Point {
 
     public AI3BeginPoint(float _x, float _y) {
@@ -9,9 +7,9 @@ public class AI3BeginPoint extends AI3Point {
     }
 
     @Override
-    public void render(PApplet _p) {
-        _p.beginShape();
-        _p.vertex(x, y); 
+    public void render() {
+        p.beginShape();
+        p.vertex(x, y); 
     }
 
 }

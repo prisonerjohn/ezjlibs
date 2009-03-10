@@ -3,21 +3,23 @@ package net.silentlycrashing.ai3;
 import java.util.*;
 import processing.core.*;
 
-public class AI3AbstractShape {
+public class AI3AbstractShape extends AI3 {
 
-    public int x;
-    public int y;
-    public int w;
-    public int h;
+    public float x;
+    public float y;
+    public float w;
+    public float h;
 
-    public ArrayList<AI3Point> pts;
+    public List<AI3Point> pts;
 
     public AI3AbstractShape() {
-        pts = new ArrayList<AI3Point>();  
+        pts = Collections.synchronizedList(new ArrayList<AI3Point>());  
+        x = 0;
+        y = 0;
     }
     
     public AI3AbstractShape(AI3Shape _shape) {
-        pts = new ArrayList<AI3Point>();
+        pts = Collections.synchronizedList(new ArrayList<AI3Point>());  
         
         x = _shape.x;
         y = _shape.y;
@@ -36,10 +38,45 @@ public class AI3AbstractShape {
             }
         }
     }
+    
+    public void render() {
+        render(0, 0);
+    }
 
-    public void render(PApplet _p) {
+    public void render(float _rx, float _ry) {
+        p.pushMatrix();
+        p.translate(-x, -y);
+        p.translate(_rx, _ry);
+        
         for (AI3Point pt : pts) {
-            pt.render(_p);
-        }  
+            pt.render();
+        }
+        
+        p.popMatrix();
+    }
+    
+    public void setAnchor(PVector _pos) {
+        setAnchor(_pos.x, _pos.y);
+    }
+    
+    public void setAnchor(float _x, float _y) {
+        x = _x;
+        y = _y;
+    }
+    
+    public void info() {
+        PApplet.println("-------------- AI3Shape INFO -------------");
+        for (AI3Point pt : pts) {
+            if (pt instanceof AI3BeginPoint) {
+                PApplet.println("-\tBegin\t(" + pt.x + ",\t" + pt.y + ")");
+            } else if (pt instanceof AI3EdgePoint) {
+                PApplet.println("-\tEdge\t(" + pt.x + ",\t" + pt.y + ")");
+            } else if (pt instanceof AI3BezierPoint) {
+                PApplet.println("-\tBezier\t(" + pt.x + ",\t" + pt.y + ")\t(" + ((AI3BezierPoint)pt).cx1 + ",\t" + ((AI3BezierPoint)pt).cy1 + ")\t(" + ((AI3BezierPoint)pt).cx2 + ",\t" + ((AI3BezierPoint)pt).cy2 + ")");
+            } else if (pt instanceof AI3EndPoint) {
+                PApplet.println("-\tEnd");
+            }
+        }       
+        PApplet.println("------------------------------------------");
     }
 }

@@ -14,6 +14,11 @@ public class AI3Tween extends AI3Shape {
     }
     
     public void tween(float ratio) {
+        // move the anchor point
+        x = PApplet.lerp(start.x, target.x, ratio);
+        y = PApplet.lerp(start.y, target.y, ratio);
+        
+        // move the contour points
         pts.clear();
         
         for (int i=0; i < start.pts.size(); i++) {
