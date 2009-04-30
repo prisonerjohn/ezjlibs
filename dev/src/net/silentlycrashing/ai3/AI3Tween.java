@@ -14,6 +14,9 @@ public class AI3Tween extends AI3Shape {
     }
     
     public void tween(float ratio) {
+        // tween the color
+        color = p.lerpColor(start.color, target.color, ratio);
+        
         // move the anchor point
         x = PApplet.lerp(start.x, target.x, ratio);
         y = PApplet.lerp(start.y, target.y, ratio);

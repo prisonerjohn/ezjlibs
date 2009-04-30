@@ -49,7 +49,7 @@ public class AI3Shape extends AI3AbstractShape {
                 pts.add(new AI3BezierPoint(x2, y2, cx1, cy1, cx2, cy2));
             }
 
-            else if (mode == 'f') {
+            else if (mode == 'f' || mode == 's') {
                 pts.add(new AI3EndPoint());
             }
         }

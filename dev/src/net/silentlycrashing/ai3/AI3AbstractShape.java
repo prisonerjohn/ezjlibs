@@ -9,22 +9,27 @@ public class AI3AbstractShape extends AI3 {
     public float y;
     public float w;
     public float h;
+    
+    public int color;
 
     public List<AI3Point> pts;
 
     public AI3AbstractShape() {
-        pts = Collections.synchronizedList(new ArrayList<AI3Point>());  
+        pts = new ArrayList<AI3Point>();  
         x = 0;
         y = 0;
+        color = 0;
     }
     
     public AI3AbstractShape(AI3Shape _shape) {
-        pts = Collections.synchronizedList(new ArrayList<AI3Point>());  
+        pts = new ArrayList<AI3Point>();  
         
         x = _shape.x;
         y = _shape.y;
         w = _shape.w;
         h = _shape.h;
+        
+        color = _shape.color;
         
         for (AI3Point pt : _shape.pts) {
             if (pt instanceof AI3BeginPoint) {
@@ -44,6 +49,9 @@ public class AI3AbstractShape extends AI3 {
     }
 
     public void render(float _rx, float _ry) {
+        p.noStroke();
+        p.fill(color);
+        
         p.pushMatrix();
         p.translate(-x, -y);
         p.translate(_rx, _ry);
@@ -62,6 +70,27 @@ public class AI3AbstractShape extends AI3 {
     public void setAnchor(float _x, float _y) {
         x = _x;
         y = _y;
+    }
+    
+    public void setColor(int _r, int _g, int _b) {
+        if (_r > 255) _r = 255; else if (_r < 0) _r = 0;
+        if (_g > 255) _g = 255; else if (_g < 0) _g = 0;
+        if (_b > 255) _b = 255; else if (_b < 0) _b = 0;
+
+        setColor(0xFF000000 | (_r << 16) | (_g << 8) | _b);
+    }
+    
+    public void setColor(int _r, int _g, int _b, int _a) {
+        if (_a > 255) _a = 255; else if (_a < 0) _a = 0;
+        if (_r > 255) _r = 255; else if (_r < 0) _r = 0;
+        if (_g > 255) _g = 255; else if (_g < 0) _g = 0;
+        if (_b > 255) _b = 255; else if (_b < 0) _b = 0;
+
+        setColor((_a << 24) | (_r << 16) | (_g << 8) | _b);
+    }
+    
+    public void setColor(int _hex) {
+        color = _hex;
     }
     
     public void scale(float _s) {
