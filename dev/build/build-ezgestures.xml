@@ -1,6 +1,4 @@
 <project name="ezGestures" default="jar">
-	<!-- $Id$ -->
-	
 	<description>
 	    This project builds the ezGestures library for Processing.  Just run 
 		"ant" and it will put a jar file in the lib directory.  This jar should 
@@ -21,10 +19,10 @@
 	</fileset>
 		
 	<path id="processing.classpath">
-	    <pathelement location="/Developer/Applications/Java/Processing.app/Contents/Resources/Java/core.jar"/>
+	    <pathelement location="/Applications/Java/Processing.app/Contents/Resources/Java/core.jar"/>
 	</path>
 	<path id="oscp5.classpath">
-	    <pathelement location="/Users/ez/Documents/Processing/libraries/oscP5/library/oscP5.jar"/>
+	    <pathelement location="/Users/elie/Documents/Processing/libraries/oscP5/library/oscP5.jar"/>
 	</path>
 
 	<target name="jar">
