@@ -76,7 +76,9 @@
 	        depends="jar,doc">
 		<mkdir dir="../ezgestures"/>
 		<mkdir dir="../ezgestures/library"/>
-		
+		<mkdir dir="../release"/>
+				
+		<copy file="library.properties" tofile="../ezgestures/library.properties"/>
 		<copy file="../lib/ezgestures.jar" tofile="../ezgestures/library/ezgestures.jar"/>
 		<copy todir="../ezgestures/examples">
 	        <fileset dir="../examples"/>
@@ -88,7 +90,8 @@
 		    <fileset refid="ezgestures.fileset"/>
 		</copy>
  
-		<zip destfile="../ezgestures.zip">
+		<copy file="library.properties" tofile="../release/ezgestures.txt"/>
+		<zip destfile="../release/ezgestures.zip">
 		 	<fileset dir="../ezgestures"/>
 		</zip>
 		
